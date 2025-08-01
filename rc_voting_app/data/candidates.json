@@ -1,0 +1,34 @@
+[
+    {
+        "name": "usama",
+        "stream": "Science",
+        "division": "A",
+        "gender": "Boy",
+        "id": "ac8aa897-fd8c-43ae-86a0-723dbde57f26",
+        "votes": 4
+    },
+    {
+        "name": "tarique",
+        "stream": "Arts",
+        "division": "A",
+        "gender": "Boy",
+        "id": "f1fa57f1-40fa-4dc2-9808-ec0473f15b2a",
+        "votes": 0
+    },
+    {
+        "name": "tosifun",
+        "stream": "Commerce",
+        "division": "B",
+        "gender": "Girl",
+        "id": "d3793781-67e2-4ab6-a35c-3f9dacb8092a",
+        "votes": 4
+    },
+    {
+        "name": "aamirun",
+        "stream": "Science",
+        "division": "A",
+        "gender": "Girl",
+        "id": "7a54d653-dee9-4b1f-a157-d9d1f27d8d44",
+        "votes": 0
+    }
+]
