@@ -9,10 +9,13 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-# File paths
-CANDIDATES_FILE = os.path.join("data", "candidates.json")
-VOTED_STUDENTS_FILE = os.path.join("data", "voted_students.json")
-SETTINGS_FILE = os.path.join("data", "settings.json")
+# File paths for deployment
+DATA_DIR = "/var/data"  # Render.com ka persistent disk path
+CANDIDATES_FILE = os.path.join(DATA_DIR, "candidates.json")
+VOTED_STUDENTS_FILE = os.path.join(DATA_DIR, "voted_students.json")
+SETTINGS_FILE = os.path.join(DATA_DIR, "settings.json")
+
+# BASE_DIR wali lines hata dein, unki ab zaroorat nahi
 
 # Pydantic Models
 class CandidateCreate(BaseModel): name: str; stream: str; division: str; gender: str
