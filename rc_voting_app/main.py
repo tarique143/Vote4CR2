@@ -8,7 +8,7 @@ COLLEGE_NAME = "Bunts Sangha's S. M. Shetty High School & Jr. College"
 
 st.set_page_config(page_title=f"{COLLEGE_NAME} | CR Election", page_icon="🗳️", layout="wide")
 
-API_URL = "https://vote4cr2.onrender.com"
+API_URL = "https://vote4cr2.onrender.com/"
 LOGO_PATH = "assets/logo.png"
 
 # --- API Communication Functions ---
