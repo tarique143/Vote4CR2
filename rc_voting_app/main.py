@@ -1,8 +1,8 @@
+# Final deployment attempt
 import streamlit as st
 import requests
 import pandas as pd
 from PIL import Image
-
 # --- Configuration ---
 COLLEGE_NAME = "Bunts Sangha's S. M. Shetty High School & Jr. College"
 
@@ -224,4 +224,5 @@ else:
         render_admin_panel()
     elif password:
         st.sidebar.error("Incorrect Password!")
+
 
