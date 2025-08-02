@@ -8,7 +8,10 @@ COLLEGE_NAME = "Bunts Sangha's S. M. Shetty High School & Jr. College"
 
 st.set_page_config(page_title=f"{COLLEGE_NAME} | CR Election", page_icon="🗳️", layout="wide")
 
-API_URL = "vote4cr2-production.up.railway.app"
+# main.py ke andar
+
+# YEH BILKUL CORRECT HAI
+API_URL = "https://vote4cr2-production.up.railway.app" 
 LOGO_PATH = "assets/logo.png"
 
 # --- API Communication Functions ---
@@ -198,4 +201,5 @@ else:
         if st.sidebar.button("Logout", use_container_width=True):
              del st.session_state.admin_logged_in
              st.rerun()
+
 
