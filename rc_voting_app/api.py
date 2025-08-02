@@ -30,7 +30,9 @@ app.add_middleware(
 
 
 # File paths for deployment
-DATA_DIR = "/var/data"
+#DATA_DIR = "/var/data"
+# Naya Code (Railway ke liye)
+DATA_DIR = "/data"
 CANDIDATES_FILE = os.path.join(DATA_DIR, "candidates.json")
 VOTED_STUDENTS_FILE = os.path.join(DATA_DIR, "voted_students.json")
 SETTINGS_FILE = os.path.join(DATA_DIR, "settings.json")
@@ -154,3 +156,4 @@ def get_voter_stats():
     unique_voters = {s['roll_no'] for s in voted_students}
     total_votes = sum(c['votes'] for c in read_data(CANDIDATES_FILE, default_data=[]))
     return {"unique_voter_count": len(unique_voters), "total_vote_count": total_votes}
+
