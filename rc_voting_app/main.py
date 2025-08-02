@@ -8,11 +8,11 @@ COLLEGE_NAME = "Bunts Sangha's S. M. Shetty High School & Jr. College"
 
 st.set_page_config(page_title=f"{COLLEGE_NAME} | CR Election", page_icon="🗳️", layout="wide")
 
-# main.py ke andar
+API_URL = "https://vote4cr2-production.up.railway.app" # Aapka Railway backend URL
 
-# YEH BILKUL CORRECT HAI
-API_URL = "https://vote4cr2-production.up.railway.app" 
-LOGO_PATH = "assets/logo.png"
+# <<< LOGO KA PATH THEEK KIYA GAYA HAI >>>
+# Streamlit Cloud repository ke root se path dhoondhta hai
+LOGO_PATH = "rc_voting_app/assets/logo.png"
 
 # --- API Communication Functions ---
 # (In functions me koi change nahi hai)
@@ -46,6 +46,7 @@ def get_voter_stats():
     try: res = requests.get(f"{API_URL}/voter-stats"); res.raise_for_status(); return res.json()
     except: return {"unique_voter_count": "N/A", "total_vote_count": "N/A"}
 
+# <<< "NEXT STUDENT" KE LIYE RESET FUNCTION >>>
 def reset_voter_session():
     keys_to_delete = ['voted_for_boy_anon', 'voted_for_girl_anon', 'roll_no_input']
     for key in keys_to_delete:
@@ -56,7 +57,7 @@ def reset_voter_session():
 
 def render_admin_panel():
     st.header("👑 Admin Dashboard")
-    # ... (Baki ka Admin panel ka code waisa hi rahega) ...
+    # ... (Admin panel ka code poora waisa hi rahega) ...
     st.subheader("Election Control Panel")
     settings = get_settings()
     with st.form("settings_form"):
@@ -119,20 +120,22 @@ def render_admin_panel():
                 else: st.info("No votes casted yet.")
 
 def render_student_view():
+    # <<< RESET BUTTON KO YAHAN ADD KAR DIYA HAI >>>
     st.sidebar.button("Reset / New Voter", on_click=reset_voter_session, use_container_width=True, help="Click here to clear the form for the next student.")
-    
+
     settings = get_settings()
     if not settings or settings.get('election_status') == "Closed":
         st.info("🗳️ Voting is currently closed by the admin. Please check back later."); return
 
     st.header("Vote for Your Class Representative (CR)")
     roll_no = None
-    if settings['roll_number_rule'] != "Disabled":
-        placeholder = "Enter Your Roll Number" + (" (Required)" if settings['roll_number_rule'] == "Mandatory" else " (Optional)")
+    if settings.get('roll_number_rule') != "Disabled":
+        placeholder = "Enter Your Roll Number" + (" (Required)" if settings.get('roll_number_rule') == "Mandatory" else " (Optional)")
         roll_no = st.text_input(placeholder, key="roll_no_input")
 
     voted_for_boy, voted_for_girl = (get_vote_status(roll_no).get("Boy", False), get_vote_status(roll_no).get("Girl", False)) if roll_no else (st.session_state.get('voted_for_boy_anon', False), st.session_state.get('voted_for_girl_anon', False))
     
+    # <<< "NEXT STUDENT" BUTTON KA LOGIC YAHAN HAI >>>
     if voted_for_boy and voted_for_girl:
         st.success("🎉 Thank you for casting your vote!"); st.balloons()
         st.button("Start Vote for Next Student", on_click=reset_voter_session, type="primary", use_container_width=True)
@@ -149,7 +152,7 @@ def render_student_view():
             with st.container(border=True):
                 st.markdown(f"#### {cand['name']}")
                 st.caption(f"Stream: {cand['stream']} | Division: {cand['division']}")
-                label = "Vote" + (f" ({cand['votes']} votes)" if settings['show_vote_counts_to_students'] else "")
+                label = "Vote" + (f" ({cand['votes']} votes)" if settings.get('show_vote_counts_to_students') else "")
                 if st.button(label, key=f"boy_{cand['id']}", disabled=voted_for_boy, use_container_width=True):
                     if vote_for_candidate(cand['id'], roll_no):
                         if not roll_no: st.session_state.voted_for_boy_anon = True
@@ -161,7 +164,7 @@ def render_student_view():
             with st.container(border=True):
                 st.markdown(f"#### {cand['name']}")
                 st.caption(f"Stream: {cand['stream']} | Division: {cand['division']}")
-                label = "Vote" + (f" ({cand['votes']} votes)" if settings['show_vote_counts_to_students'] else "")
+                label = "Vote" + (f" ({cand['votes']} votes)" if settings.get('show_vote_counts_to_students') else "")
                 if st.button(label, key=f"girl_{cand['id']}", disabled=voted_for_girl, use_container_width=True):
                     if vote_for_candidate(cand['id'], roll_no):
                         if not roll_no: st.session_state.voted_for_girl_anon = True
@@ -170,8 +173,11 @@ def render_student_view():
 # --- Main App Logic ---
 logo_col1, logo_col2, logo_col3 = st.columns([2,1,2])
 with logo_col2:
-    try: st.image(Image.open(LOGO_PATH), width=150)
-    except FileNotFoundError: pass
+    try:
+        st.image(Image.open(LOGO_PATH), width=150)
+    except FileNotFoundError:
+        # Agar logo na mile to error na dikhaye, balki ek message de
+        st.warning("Logo not found. Check path in code and GitHub repo.")
 st.markdown(f"<h1 style='text-align: center; color: #2E4053;'>{COLLEGE_NAME}</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center; color: #566573;'>CR Election Portal</h3>", unsafe_allow_html=True)
 st.markdown("---")
@@ -182,24 +188,18 @@ view = st.sidebar.radio("Go to", ["Student Voting", "Admin Panel"])
 if view == "Student Voting":
     render_student_view()
 else:
-    # <<< YAHAN BADLAV KIYA GAYA HAI >>>
-    # Admin login ko ek form ke andar daal diya hai
     with st.sidebar.form("admin_login_form"):
         password = st.text_input("Enter Admin Password", type="password")
         submitted = st.form_submit_button("Login")
-
         if submitted:
             if password == "admin123":
                 st.session_state.admin_logged_in = True
-                st.rerun() # Page ko rerun karo taaki admin panel dikhe
+                st.rerun()
             else:
                 st.error("Incorrect Password!")
 
-    # Check karo ki admin logged in hai ya nahi
     if st.session_state.get("admin_logged_in", False):
         render_admin_panel()
         if st.sidebar.button("Logout", use_container_width=True):
              del st.session_state.admin_logged_in
              st.rerun()
-
-
