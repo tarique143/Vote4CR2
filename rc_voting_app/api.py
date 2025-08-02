@@ -13,10 +13,13 @@ app = FastAPI()
 # <<< YEH NAYA CODE BLOCK HAI >>>
 # CORS (Cross-Origin Resource Sharing) ko allow karna
 # Yeh browser security ko batata hai ki hamara frontend (Streamlit) backend se baat kar sakta hai.
+# api.py ke andar
+
+# YEH BILKUL CORRECT HAI
 origins = [
-    "https://vote4cr.streamlit.app",  # Aapke Streamlit app ka URL
+    "https://vote4cr2.streamlit.app",  # Aapka naya Streamlit URL
     "http://localhost",
-    "http://localhost:8501", # Local Streamlit app ke liye
+    "http://localhost:8501",
 ]
 
 app.add_middleware(
@@ -156,4 +159,5 @@ def get_voter_stats():
     unique_voters = {s['roll_no'] for s in voted_students}
     total_votes = sum(c['votes'] for c in read_data(CANDIDATES_FILE, default_data=[]))
     return {"unique_voter_count": len(unique_voters), "total_vote_count": total_votes}
+
 
