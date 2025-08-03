@@ -11,7 +11,7 @@ COLLEGE_NAME = "Bunts Sangha's S. M. Shetty High School & Jr. College"
 st.set_page_config(page_title=f"{COLLEGE_NAME} | CR Election", page_icon="🗳️", layout="wide")
 
 API_URL = "https://vote4cr2-production.up.railway.app" # Aapka Railway backend URL
-LOGO_PATH = "rc_voting_app/assets/logo.png"
+LOGO_PATH = "rc_voting_app/assets/SMSHETTYLOGO.png"
 
 # --- API Communication Functions ---
 # (Inme koi badlav nahi hai)
@@ -198,3 +198,4 @@ else:
         if st.sidebar.button("Logout", use_container_width=True):
              del st.session_state.admin_logged_in
              st.rerun()
+
